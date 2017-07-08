@@ -1,0 +1,33 @@
+<style>
+	.fc_top{
+        background:#276CAD;
+    }
+    .banner_top{
+        color:white;
+        float:left;
+        font-size:36px;
+        width:40%;
+        /*text-align:center;*/
+        margin-top:15px;
+    }
+</style>
+<div class="fc_top">
+	<div class="banner_top">
+        <a href="{:U('Admin/Index/index')}"><img src="__adminPublic__/images/home.png"></a>
+    </div>
+    <div class="banner_top">后台管理中心</div>
+	<div class="topright">
+		<ul>
+			<li>
+                <span><img src="__adminPublic__/images/help.png" title="帮助"  class="helpimg"/></span>
+                <a href="#">帮助</a>
+            </li>
+			<li><a href="#">关于</a></li>
+		</ul>
+		<div class="user">
+			<span><?php if(session('AdminName')){echo session('AdminName');}else{echo session('UserName');}?></span>
+			<i><a href="{:U('Admin/Login/logout')}" style="color:white" >退出</a></i>
+		</div>
+	</div>
+	<div class="cl"></div>
+</div>

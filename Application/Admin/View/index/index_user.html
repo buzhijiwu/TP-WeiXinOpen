@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=720,width=device-width, initial-scale=1,  initial-scale=1.0,maximum-scale=1.0, user-scalable=no;" />
+    <link href="__adminPublic__/css/style.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="__adminPublic__/js/jquery.js"></script>
+    <script language="JavaScript" src="__adminPublic__/js/index.js"></script>
+    <title>后台管理中心</title>
+</head>
+<body>
+<include file="common:top" />
+<include file="common:left" />
+<div class="fc_right" style=" padding-left:187px;">
+    <div style=" width:100%;">
+    </div>
+</div>
+<div>
+    <div class="place">
+        <span>位置：</span>
+        <ul class="placeul">
+            <li><a href="#">首页</a></li>
+        </ul>
+    </div>
+
+    <div class="mainindex">
+
+        <div class="welinfo">
+            <span><img src="__adminPublic__/images/sun.png" alt="天气" /></span>
+            <b><?php echo session('UserName')?>您好，欢迎使用后台管理系统</b>
+            <!--<a href="#">账号管理</a>-->
+        </div>
+        <div class="welinfo">
+            <span><img src="__adminPublic__/images/time.png" alt="时间" /></span>
+            <i>您上次登录的时间：{$last_login_time}</i>
+        </div>
+
+        <div class="xline"></div>
+        <div class="box"></div>
+
+        <div class="welinfo">
+            <span><img src="__adminPublic__/images/dp.png" alt="提醒" /></span>
+            <b>微信公众号基本信息</b>
+            <a href="{:U('Admin/WeixinOpen/authorization/')}">重新授权</a>
+        </div>
+
+        <if condition="$user_info.user_appid neq ''">
+            <ul class="iconlist">
+                <li><img src="{$user_info.head_img}" style="width:100px;height:100px;"/></li>
+            </ul><br/>
+            <ul class="infolist">
+                <!--<li><span><img src="{$user_info.qrcode_url}" style="width:220px;height:220px;"/></span></li>-->
+                <li><span>AppId：{$user_info.user_appid}</span></li>
+                <li><span>昵称：{$user_info.nick_name}</span></li>
+                <li><span>类型：</span>
+                    <if condition="$user_info.service_type eq '2'">
+                        <span style="color:green;">服务号</span>
+                        <else/>
+                        <span style="color:green;">订阅号</span>
+                    </if>
+                </li>
+                <li><span>是否认证：</span>
+                    <if condition="$user_info.verify_type eq '0'">
+                        <span style="color:green;">微信认证</span>
+                        <elseif condition="$user_info.verify_type eq '-1'"/>
+                        <span style="color:red;">未认证</span>
+                        <else/>
+                        <span>其他</span>
+                    </if>
+                </li>
+                <li><span>原始ID：{$user_info.user_name}</span></li>
+                <li><span>关联微信号：{$user_info.alias}</span></li>
+            </ul>
+        </if>
+
+        <!--
+        <div class="xline"></div>
+
+        <ul class="iconlist">
+            <li><img src="__adminPublic__/images/ico01.png" /><p><a href="#">管理设置</a></p></li>
+            <li><img src="__adminPublic__/images/ico02.png" /><p><a href="#">发布文章</a></p></li>
+            <li><img src="__adminPublic__/images/ico03.png" /><p><a href="#">数据统计</a></p></li>
+            <li><img src="__adminPublic__/images/ico04.png" /><p><a href="#">文件上传</a></p></li>
+            <li><img src="__adminPublic__/images/ico05.png" /><p><a href="#">目录管理</a></p></li>
+            <li><img src="__adminPublic__/images/ico06.png" /><p><a href="#">查询</a></p></li>
+        </ul>
+        <div class="ibox"><a class="ibtn"><img src="__adminPublic__/images/iadd.png" />添加新的快捷功能</a></div>
+
+        <div class="xline"></div>
+        <div class="box"></div>
+
+        <div class="welinfo">
+            <span><img src="__adminPublic__/images/dp.png" alt="提醒" /></span>
+            <b>Uimaker信息管理系统使用指南</b>
+        </div>
+        <ul class="infolist">
+            <li><span>您可以快速进行文章发布管理操作</span><a class="ibtn">发布或管理文章</a></li>
+            <li><span>您可以快速发布产品</span><a class="ibtn">发布或管理产品</a></li>
+            <li><span>您可以进行密码修改、账户设置等操作</span><a class="ibtn">账户管理</a></li>
+        </ul>
+
+        <div class="xline"></div>
+
+        <div class="uimakerinfo"><b>查看Uimaker网站使用指南，您可以了解到多种风格的B/S后台管理界面,软件界面设计，图标设计，手机界面等相关信息</b>(<a href="http://www.uimaker.com" target="_blank">www.uimaker.com</a>)</div>
+        <ul class="umlist">
+            <li><a href="#">如何发布文章</a></li>
+            <li><a href="#">如何访问网站</a></li>
+            <li><a href="#">如何管理广告</a></li>
+            <li><a href="#">后台用户设置(权限)</a></li>
+            <li><a href="#">系统设置</a></li>
+        </ul>
+        -->
+
+    </div>
+</div>
+<script language="javascript">
+    $(function () {
+        var user_appid = '{$user_info.user_appid}';
+        if(!user_appid){
+            var auth_url = "{:U('Admin/WeixinOpen/authorization/')}";
+            if(confirm('您尚未授权微信公众号，现在去授权？')){
+                window.location.href = auth_url;
+            }
+        }
+    });
+</script>
+</body>
+</html>

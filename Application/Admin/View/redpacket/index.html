@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="__adminPublic__/css/style.css" rel="stylesheet" type="text/css" />
+<link href="__adminPublic__/css/select.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="__adminPublic__/js/jquery.js"></script>
+<script type="text/javascript" src="__adminPublic__/js/jquery.idTabs.min.js"></script>
+<script type="text/javascript" src="__adminPublic__/js/select-ui.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(e) {
+    $(".select1").uedSelect({
+		width : 345			  
+	});
+	$(".select2").uedSelect({
+		width : 167  
+	});
+	$(".select3").uedSelect({
+		width : 100
+	});
+});
+</script>
+<title>Admin</title>
+</head>
+<body>
+<include file="common:top" />
+<include file="common:left" />
+<div class="fc_right" style=" padding-left:187px;">
+	<div style=" width:100%;">
+		<div class="place"> <span>位置：</span>
+  <ul class="placeul">
+    <li><a href="#">首页</a></li>
+    <li><a href="#">系统设置</a></li>
+  </ul>
+</div>
+<div class="formbody">
+  <div id="usual1" class="usual">
+    <div class="itab">
+      <ul>
+        <li><a class="selected">红包活动管理</a></li>
+        <li style="float:right; background:none; border:0"><a href="{:U('Admin/RedPacket/add')}">添加活动</a></li>
+      </ul>
+    </div>
+    <div class="tabson">
+	<form method="post" action="{:U('/Admin/redPacket/index')}">
+	<ul class="seachform">
+        <li>
+          <label>活动id</label>
+          <input name="id" type="text" class="scinput" value="{$id}" />
+        </li>
+        <li>
+          <label>活动名称</label>
+          <input name="name" type="text" class="scinput" value="{$name}" />
+        </li>
+        <li>
+          <label>&nbsp;</label>
+          <input name="" type="submit" class="scbtn" value="查询"/>
+        </li>
+      </ul>
+	 </form>
+      <table class="imgtable">
+        <thead>
+          <tr>
+          	<th>活动id</th>
+          	<th>活动名称</th>
+          	<th>红包总数</th>
+          	<th>红包剩余</th>
+          	<th>是否发布</th>
+          	<th>是否删除</th>
+			<th>创建时间</th>
+			<th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+        <volist name="lists" id="redpacket">
+
+	          <tr>
+	          	<td>{$redpacket.id}</td>
+	          	<td>{$redpacket.name}</td>
+	            <td>{$redpacket.totalNums}</td>
+	            <td>{$redpacket.totalPrices}</td>
+	            <td>
+	            	<if condition="$redpacket.is_release eq 1">
+                        <span style="color:green;">是</span>
+                    <else/>
+                    	<span>否</span>
+	            	</if>
+	            </td>
+	             <td>
+	            	<if condition="$redpacket.is_delete eq 1">
+                        <span style="color:green;">是</span>
+                    <else/>
+                    	<span>否</span>
+	            	</if>
+	            </td>
+	            <td>{$redpacket.add_time}</td>
+	             <td>
+                     <span>
+                        <a href="{:U('/Admin/redPacket/view')}&id={$redpacket.id}&user_id={$redpacket.user_id}" style="color:#09F">查看</a>
+                    	<if condition="$redpacket.is_release != 1 and $redpacket.is_delete == 0">
+                            <a href="{:U('/Admin/redPacket/add')}&id={$redpacket.id}&user_id={$redpacket.user_id}" style="color:#09F">修改</a>
+                        </if>
+                        <if condition="$redpacket.is_release != 1 and $redpacket.is_delete == 0">
+                        	<a href="javascript:void(0)" class="delRedPacket" id="{$redpacket.id}_{$redpacket.user_id}" style="color:#09F">删除</a>
+                        </if>
+                        <if condition="$redpacket.is_release != 1 and $redpacket.is_delete == 0">
+                            <a href="javascript:void(0)" style="color:#09F" class="releaseRedPacket">发布</a>
+                            <input type="hidden" name="rid" value="{$redpacket.id}"/>
+                            <input type="hidden" name="user_id" value="{$redpacket.user_id}"/>
+                        </if>
+                    </span>
+	             </td>
+	          </tr>
+
+		</volist>
+        </tbody>
+      </table>
+          {$link_page}  
+    </div>
+  </div>
+  <script type="text/javascript"> 
+		$('.tablelist tbody tr:odd').addClass('odd');
+		
+		$('.delRedPacket').click(function(){
+			var data = $(this).attr('id');
+			var arr = data.split('_');
+			var id = arr[0];
+			var user_id = arr[1];
+			if(confirm('确定删除该活动吗？')){
+				$.ajax({
+					type:"post",
+					data:'id='+id+'&user_id='+user_id,
+					url:"/Admin/redPacket/delete",
+					dataType:'json',
+					success:function(res){
+						if(res){
+							location.href = '/Admin/redPacket'; 
+						}else{
+							alert('删除活动失败了，不要问，OK？！！');
+						}
+					},
+				});
+			}else{
+				
+			}
+		})
+		$('.releaseRedPacket').click(function(){
+			var id = $(this).next().val();
+			var user_id = $(this).next().next().val();
+			if(confirm('确定发布该活动吗？')){
+				$.ajax({
+					type:"post",
+					data:'id='+id+'&user_id='+user_id,
+					url:"/Admin/redPacket/release",
+					dataType:'json',
+					success:function(res){
+						if(res){
+							location.href = '/Admin/redPacket'; 
+						}else{
+							alert('发布活动失败了，不要问，OK？！！');
+						}
+					},
+				});
+			}else{
+				
+			}
+		})
+    </script> 
+</div>
+	</div>
+</div>
+</body>
+</html>

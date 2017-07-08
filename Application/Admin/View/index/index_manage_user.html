@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=720,width=device-width, initial-scale=1,  initial-scale=1.0,maximum-scale=1.0, user-scalable=no;" />
+    <link href="__adminPublic__/css/style.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="__adminPublic__/js/jquery.js"></script>
+    <script language="JavaScript" src="__adminPublic__/js/index.js"></script>
+    <title>后台管理中心</title>
+</head>
+<body>
+<include file="common:top" />
+<div>
+    <div class="mainindex">
+        <div class="welinfo">
+            <span><img src="__adminPublic__/images/sun.png" alt="天气" /></span>
+            <b><?php echo session('AdminName')?>您好，欢迎登录后台管理系统</b>
+            <a href="#">帐号设置</a>
+            <div style="float:right;">
+                <if condition="$role eq '1'">
+                    <a class="ibtn">管理运营账号</a>
+                </if>
+                <a class="ibtn"><img src="__adminPublic__/images/iadd.png" />添加商户账号</a>
+            </div>
+        </div>
+        <div class="welinfo">
+            <span><img src="__adminPublic__/images/time.png" alt="时间" /></span>
+            <i>您上次登录的时间：{$last_login_time}</i>
+        </div>
+    </div>
+    <table class="imgtable">
+        <thead>
+        <tr>
+            <th>商家ID</th>
+            <th>商家账号</th>
+            <th>公众号AppId</th>
+            <th>公众号头像</th>
+            <th>公众号昵称</th>
+            <th>公众号类型</th>
+            <th>是否认证</th>
+            <th>原始ID</th>
+            <th>关联微信号</th>
+            <th>二维码</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <volist name="user_list" id="user">
+            <tr>
+                <td>{$user.id}</td>
+                <td>{$user.username}</td>
+                <td>{$user.user_appid}</td>
+                <td>
+                    <img src="{$user.head_img}" alt="" style="width:50px;height:50px;text-indent:0px;"/>
+                </td>
+                <td>{$user.nick_name}</td>
+                <td>
+                    <if condition="$user.service_type eq '2'">
+                        <span style="color:green;">服务号</span>
+                        <else/>
+                        <span style="color:green;">订阅号</span>
+                    </if>
+                </td>
+                <td>
+                    <if condition="$user.verify_type eq '0'">
+                        <span style="color:green;">微信认证</span>
+                        <elseif condition="$user.verify_type eq '-1'"/>
+                        <span style="color:red;">未认证</span>
+                        <else/>
+                        <span>其他</span>
+                    </if>
+                </td>
+                <td>{$user.user_name}</td>
+                <td>{$user.alias}</td>
+                <td>
+                    <a href="{$user.qrcode_url}" target="_blank">
+                        <img src="{$user.qrcode_url}" alt="" style="width:50px;height:50px;text-indent:0px;"/>
+                    </a>
+                </td>
+                <td>
+                    <a href="{:U('Admin/Index/index_manage_user/user_id/')}/{$user.id}/"><input name="" type="submit" class="scbtn" value="管理"/></a>
+                </td>
+            </tr>
+        </volist>
+        </tbody>
+    </table>
+    {$link_page}
+</div>
+</body>
+</html>
